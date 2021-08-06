@@ -1,0 +1,7 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+La probabilidad es: 
+*/
