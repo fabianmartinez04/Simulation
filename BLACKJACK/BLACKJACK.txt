@@ -1,7 +1,84 @@
 /*
-TecnolÃ³gico de Costa Rica
-Curso de SimulaciÃ³n
-Fabian MartÃ­nez Valverde 2019061575
+Tecnológico de Costa Rica
+Curso de Simulación
+Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 La probabilidad es: 
 */
+
+
+
+/*
+* Realiza la suma de las cartas revisando los As
+*
+* Input: cartas
+* Output: _suma
+*/
+newcmd contar cartas _suma
+
+	sum cartas _suma		'Suma las cartas
+	count cartas=1 cantAs	'Cuenta la cantidad de As
+
+
+	if cantAs >= 1 AND _suma <= 11	'Si hay al menos un As y la suma es 11 o menos...
+		_suma = _suma+10	'puede tomarse el As como un 11 al sumar el 10 restante
+	end
+
+
+end
+
+
+
+
+/*
+*********************************************
+                     Main
+*********************************************
+*/
+
+clearoutput
+
+numCiclos = 1
+exitos = 0
+
+repeat numCiclos
+   
+	copy 4#1,13 deck 'Crea el deck
+	'print deck
+   
+	shuffle deck deck	'Revuelve el deck
+	'print deck
+   
+	take deck (1 3) cartasJug	'Reparte las cartas al jugador
+	take deck (2 4) cartasCasa	'Reparte las cartas a la casa
+	remove deck (1 2 3 4) deck	'Saca las cartas del deck
+	'print cartasJug cartasCasa deck
+   
+	'Cambia los 11, 12 y 13 por 10
+	recode cartasJug>10 10 cartasJug
+	recode cartasCasa>10 10 cartasCasa
+   
+	print cartasJug cartasCasa
+   
+	
+	contar cartasJug sumaJug	'Calcula la suma del jugador
+
+	contar cartasCasa sumaCasa	'Calcula la suma de la casa
+	
+	print sumaJug
+	print sumaCasa
+   
+   
+end
+
+
+
+
+
+
+
+
+
+
+
+
