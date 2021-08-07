@@ -1,12 +1,15 @@
 /*
 Tecnológico de Costa Rica
-Curso de Simulación
+Curso de Simulación 
+Tarea programada de BlackJack
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 La probabilidad es: 
 */
 
 
+/* Variable Global */
+GLOBAL deck
 
 /*
 * Realiza la suma de las cartas revisando los As
@@ -27,6 +30,64 @@ newcmd contar cartas _suma
 
 end
 
+/*
+*
+* Estrategia del jugador
+*
+*/
+
+
+/*
+* Sigue la estrategia del jugador para determinar si hace un Hit o Stand
+*
+* Input: sumCartas, visibleCasa
+* Output: decision
+*/
+newcmd cogerCarta sumCartas visibleCasa decision
+	
+	'Si la carta visible de la casa es un As se toma como valor de 11
+	if visibleCasa=1
+      		visibleCasa = 11
+	end
+
+	'Condicionales de la estrategia
+	' Hit = 1 y Stand = 0
+	if (sumCartas >= 04 AND sumCartas <= 11)
+      		decision = 1
+   	elseif sumCartas = 12 AND (visibleCasa <= 3 OR visibleCasa >= 7)
+      		decision = 1
+   	elseif (sumCartas >= 13 AND sumCartas <= 16) AND visibleCasa >= 7
+     		decision = 1
+   	else
+      		decision = 0
+  	end
+
+end
+
+
+/*
+* Simula el turno del jugador hasta que decida o le toque hacer un stand 
+*
+* Input: cartasJug, visibleCasa
+* Output: cartasJugFinales
+*/
+newcmd turnoJugador cartasJug visibleCasa cartasJugFinales
+	
+	contar cartasJug sumaJug 'Cuenta el numero de cartas del jugador
+	cogerCarta sumaJug visibleCasa decision 'Llama el metodo para decidir si hacer hit o stand
+
+	concat cartasJug cartasJugFinales 'Agrega las cartas del jugador a las cartas finales
+	
+	'Ciclo que se mantiene hasta que decision = 0
+	while decision = 1
+		take deck (1) carta 	'Toma carta del deck
+		recode carta>10 10 carta	'Si es mayor a 10 la cambie por un 10
+		concat carta cartasJugFinales cartasJugFinales 'Agrega la carta a las cartas finales
+		remove deck (1) deck 	'Remueve la carta del deck
+		contar cartasJugFinales sumaJug
+		cogerCarta sumaJug visibleCasa decision		'Se vuelve a llamar al metodo para decidir si es Hit o stand
+	end
+end
 
 
 
@@ -44,15 +105,15 @@ exitos = 0
 repeat numCiclos
    
 	copy 4#1,13 deck 'Crea el deck
-	'print deck
+	print deck
    
 	shuffle deck deck	'Revuelve el deck
-	'print deck
+	print deck
    
 	take deck (1 3) cartasJug	'Reparte las cartas al jugador
 	take deck (2 4) cartasCasa	'Reparte las cartas a la casa
 	remove deck (1 2 3 4) deck	'Saca las cartas del deck
-	'print cartasJug cartasCasa deck
+	print cartasJug cartasCasa deck
    
 	'Cambia los 11, 12 y 13 por 10
 	recode cartasJug>10 10 cartasJug
@@ -60,14 +121,23 @@ repeat numCiclos
    
 	print cartasJug cartasCasa
    
+	'Guarda la carta visible de la Casa
+   	take cartasCasa 2,2 visibleCasa
+	print visibleCasa 
+
+	'Turno Jugador
+	turnoJugador cartasJug visibleCasa cartasJugFinales
 	
-	contar cartasJug sumaJug	'Calcula la suma del jugador
+
+	print deck
+	print cartasJugFinales
+	contar cartasJugFinales sumaJug	'Calcula la suma del jugador
 
 	contar cartasCasa sumaCasa	'Calcula la suma de la casa
 	
 	print sumaJug
 	print sumaCasa
-   
+   	
    
 end
 
