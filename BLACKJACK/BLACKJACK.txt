@@ -4,7 +4,7 @@ Curso de Simulación
 Tarea programada de BlackJack
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
-La probabilidad es: 
+La probabilidad es: 0.4282195
 */
 
 
@@ -82,12 +82,43 @@ newcmd turnoJugador cartasJug visibleCasa cartasJugFinales
 	while decision = 1
 		take deck (1) carta 	'Toma carta del deck
 		recode carta>10 10 carta	'Si es mayor a 10 la cambie por un 10
-		concat carta cartasJugFinales cartasJugFinales 'Agrega la carta a las cartas finales
+		concat cartasJugFinales carta cartasJugFinales 'Agrega la carta a las cartas finales
 		remove deck (1) deck 	'Remueve la carta del deck
 		contar cartasJugFinales sumaJug
 		cogerCarta sumaJug visibleCasa decision		'Se vuelve a llamar al metodo para decidir si es Hit o stand
 	end
 end
+
+
+/*
+* Simula el turno de la casa hasta que decida o le toque hacer un stand
+*
+* Input: cartasCasa sumaJug
+* Output: cartasCasaFinales
+*/
+newcmd turnoCasa cartasCasa sumaJug cartasCasaFinales
+
+	contar cartasCasa sumaCasa 'Cuenta el numero de cartas de la casa
+
+	concat cartasCasa cartasCasaFinales 'Agrega las cartas de la casa a las cartas finales
+
+	if sumaJug <= 21	'Si el jugador no se ha pasado de 21 juega, sino no hace falta
+
+		'Ciclo que se mantiene hasta que la casa sume 17 o más
+		while sumaCasa <= 16
+			take deck (1) carta 	'Toma carta del deck
+			recode carta>10 10 carta	'Si es mayor a 10 la cambie por un 10
+			concat cartasCasaFinales carta cartasCasaFinales 'Agrega la carta a las cartas finales
+			remove deck (1) deck 	'Remueve la carta del deck
+
+			contar cartasCasaFinales sumaCasa
+		end
+
+	end
+
+end
+
+
 
 
 
@@ -99,49 +130,61 @@ end
 
 clearoutput
 
-numCiclos = 1
+numCiclos = 100000		'Ciclos para revisión
+'numCiclos = 10000000	'Ciclos para calcular prob
+
 exitos = 0
 
 repeat numCiclos
    
 	copy 4#1,13 deck 'Crea el deck
-	print deck
+	'print deck
    
 	shuffle deck deck	'Revuelve el deck
-	print deck
+	'print deck
    
 	take deck (1 3) cartasJug	'Reparte las cartas al jugador
 	take deck (2 4) cartasCasa	'Reparte las cartas a la casa
 	remove deck (1 2 3 4) deck	'Saca las cartas del deck
-	print cartasJug cartasCasa deck
+	'print cartasJug cartasCasa
    
 	'Cambia los 11, 12 y 13 por 10
 	recode cartasJug>10 10 cartasJug
 	recode cartasCasa>10 10 cartasCasa
    
-	print cartasJug cartasCasa
+	'print cartasJug cartasCasa deck
    
 	'Guarda la carta visible de la Casa
    	take cartasCasa 2,2 visibleCasa
-	print visibleCasa 
+	'print visibleCasa 
 
 	'Turno Jugador
 	turnoJugador cartasJug visibleCasa cartasJugFinales
-	
-
-	print deck
-	print cartasJugFinales
 	contar cartasJugFinales sumaJug	'Calcula la suma del jugador
 
-	contar cartasCasa sumaCasa	'Calcula la suma de la casa
-	
-	print sumaJug
-	print sumaCasa
+
+	'Turno Casa
+	turnoCasa cartasCasa sumaJug cartasCasaFinales
+	contar cartasCasaFinales sumaCasa	'Calcula la suma de la casa
+
+
+	'Determina quién gana
+	if (sumaJug <= 21 AND sumaCasa < sumaJug) OR sumaCasa > 21	'Gana Jugador
+		exitos = exitos + 1
+	end
+
+	'print deck
+
+	'Prints para ver los resultados
+	'print cartasJugFinales cartasCasaFinales sumaJug sumaCasa
+
    	
    
 end
 
+prob = exitos/numCiclos
 
+print prob
 
 
 
