@@ -1,0 +1,75 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Huecos con Dígitos
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+*/
+
+
+
+/*
+* Explotar un numero
+* Convierte un número en una lista
+*
+* Input: dec (num decimales), num
+* Output: lista
+*/
+newcmd explotar dec num lista
+   decMasUno = dec + 1
+   res = ()
+   t = num * 10^decMasUno
+   /* integer round t t */
+   integer truncate t t
+   /*
+   print num 
+   print t
+   */
+   numCiclos = decMasUno
+   repeat numCiclos
+      rem = t % 10
+      quo = t / 10
+      integer truncate quo quo
+      t = quo
+      concat rem res res
+   end
+   take res 1,dec lista
+end
+
+
+
+/*
+*********************************************
+                     Main
+*********************************************
+*/
+
+clearoutput
+
+read file "" entrada	'Lee el archivo con los números
+'input cantDecimales 'Lee la cantidad de decimales para los números
+cantDecimales = 4
+
+lista = () 'Inicializa la lista vacía para los números
+
+
+' Recorre la lista de números y los explota para agregarlos a la lista final
+foreach numero entrada
+
+   explotar cantDecimales numero res
+   concat lista res lista
+
+end
+
+print lista
+
+
+
+
+
+
+
+
+
+
