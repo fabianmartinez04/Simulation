@@ -87,20 +87,18 @@ newcmd contar lista keys values
       
       if contador <> -1		'Si el contador está activo entonces guarda el registro
          
-         count keys=contador existeLlave
+         count keys=contador existeLlave	'Obtiene si ya existe la llave
          
-         if existeLlave = 0
+         if existeLlave = 0		'Si no existe, la agrega y coloca una repetición
             concat keys contador keys
             concat values (1) values
-         else
-            SEARCH_UNSORTED keys contador index
-            take values index repeticiones
-            repeticiones = repeticiones+1
-            put repeticiones index values
+
+         else			'Si existe:
+            SEARCH_UNSORTED keys contador index	'Obtiene el índice en la lista de llaves
+            take values index repeticiones	'Obtiene el valor de la lista de repeticiones
+            repeticiones = repeticiones+1		'Aumenta la repetición en 1
+            put repeticiones index values		'Aumenta el valor en la lista
          end
-	/*
-	Lógica para actualizar keys y values
-	*/
          
       end
       
@@ -120,17 +118,20 @@ end
 
 /*
 * Calcula las frecuencias esperadas
+*
+* Input: keys total
+* Output: frecuencias
 */
 newcmd calcEsperados keys total frecuencias
    
-   frecuencias = ()
+   frecuencias = ()	'Inicializa la lista vacía
    
-   foreach key keys
-      res = 0.1*(0.9^key)*total
-      if res < 5
+   foreach key keys	'Recorre la lista de llaves
+      res = 0.1*(0.9^key)*total	'Calcula p(key)
+      if res < 5			'Si la frecuencia esperada es menor a 5 se termina
          break
       end
-      concat frecuencias res frecuencias
+      concat frecuencias res frecuencias	'Si no, lo agrega a la lista
       
    end
 end
@@ -169,18 +170,18 @@ print
 
 contar lista keys values	'Cuenta la lista para obtener la lista de los huecos
 
-sum values totalHuecos
+sum values totalHuecos	'Calcula el total de huecos
 
-calcEsperados keys totalHuecos esperados
+calcEsperados keys totalHuecos esperados	'Calcula las frecuencias esperadas
 
-size esperados n
+size esperados n	'Obtiene el tamaño de los esperados
 
-take keys 1,n keys
+take keys 1,n keys		'Recorta las listas de llaves y valores al mismo tamaño de las esperadas
 take values 1,n values
 
-print table keys values esperados
+print table keys values esperados	'Imprime bonita la tabla
 
-CHISQUARE values esperados chiCuadrado 
+CHISQUARE values esperados chiCuadrado 	'Calcula chisquare y lo imprime
 print
 print chiCuadrado
 
