@@ -1,3 +1,4 @@
+INCLUDE "/lib/unsortedSearchCommands.txt"
 
 /*
 Tecnológico de Costa Rica
@@ -78,13 +79,24 @@ newcmd contar lista keys values
    
    
    
-   foreach n (1 2 3 1 )
+   foreach n lista
       n = n+1	'Como las listas empiezan a contar en 1 se incrementa n en 1
       
       take contadores n contador	'Toma el contador de del dígito n
       
       if contador <> -1		'Si el contador está activo entonces guarda el registro
          
+	count keys=contador existeLlave
+
+	if existeLlave = 0
+		concat keys contador keys
+		concat values (1) values
+	else
+		SEARCH_UNSORTED keys contador index
+		take values index repeticiones
+		repeticiones = repeticiones+1
+		put repeticiones index values 
+	end
 	/*
 	Lógica para actualizar keys y values
 	*/
@@ -96,8 +108,8 @@ newcmd contar lista keys values
       
    end
    
-   
-   print contadores
+   sortcoord keys values	'Ordena la lista
+   'print keys values
 end
 
 
