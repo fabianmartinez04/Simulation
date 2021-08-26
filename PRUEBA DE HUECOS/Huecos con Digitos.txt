@@ -66,7 +66,7 @@ end
 
 
 /*
-* Cuenta los huecos de una lista
+* Cuenta los huecos de una lista de digitos
 *
 * Input: lista
 * Output: keys values
@@ -149,10 +149,8 @@ end
 
 clearoutput
 
-read file "D:/Progras/Simulation/PRUEBA DE HUECOS/91 Ejemplo de clase n=30 Huecos con Digitos-1.txt" entrada	'Lee el archivo con los números
-'read file "D:/Progras/Simulation/PRUEBA DE HUECOS/91 Ejemplo de clase n=30 Huecos con Digitos-1.txt" entrada	'Lee el archivo con los números
-'input cantDecimales 'Lee la cantidad de decimales para los números
-cantDecimales = 4
+read file "" entrada	'Lee el archivo con los números
+input cantDecimales 'Lee la cantidad de decimales para los números 
 
 lista = () 'Inicializa la lista vacía para los números
 
