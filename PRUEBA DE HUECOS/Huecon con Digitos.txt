@@ -86,17 +86,17 @@ newcmd contar lista keys values
       
       if contador <> -1		'Si el contador está activo entonces guarda el registro
          
-	count keys=contador existeLlave
-
-	if existeLlave = 0
-		concat keys contador keys
-		concat values (1) values
-	else
-		SEARCH_UNSORTED keys contador index
-		take values index repeticiones
-		repeticiones = repeticiones+1
-		put repeticiones index values 
-	end
+         count keys=contador existeLlave
+         
+         if existeLlave = 0
+            concat keys contador keys
+            concat values (1) values
+         else
+            SEARCH_UNSORTED keys contador index
+            take values index repeticiones
+            repeticiones = repeticiones+1
+            put repeticiones index values
+         end
 	/*
 	Lógica para actualizar keys y values
 	*/
@@ -111,6 +111,33 @@ newcmd contar lista keys values
    sortcoord keys values	'Ordena la lista
    'print keys values
 end
+
+
+
+
+
+
+/*
+* Calcula las frecuencias esperadas
+*/
+newcmd calcEsperados keys total frecuencias
+   
+   frecuencias = ()
+   
+   foreach key keys
+      res = 0.1*(0.9^key)*total
+      if res < 5
+         break
+      end
+      concat frecuencias res frecuencias
+      
+   end
+end
+
+
+
+
+
 
 
 /*
@@ -143,8 +170,16 @@ print lista
 
 contar lista keys values	'Cuenta la lista para obtener la lista de los huecos
 
+sum values totalHuecos
 
+calcEsperados keys totalHuecos esperados
 
+size esperados n
+
+take keys 1,n keys
+take values 1,n values
+
+print table keys values esperados
 
 
 
