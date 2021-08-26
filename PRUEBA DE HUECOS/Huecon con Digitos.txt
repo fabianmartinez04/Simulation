@@ -1,4 +1,4 @@
-INCLUDE "/lib/unsortedSearchCommands.txt"
+
 
 /*
 Tecnológico de Costa Rica
@@ -9,8 +9,9 @@ Gustavo Blanco Alfaro 2019063503
 
 */
 
+/*Librerias*/
 INCLUDE "/lib/coordinatedVectorCommands.txt" 'Import para sortcoord
-
+INCLUDE "/lib/unsortedSearchCommands.txt"
 
 
 
@@ -165,7 +166,7 @@ foreach numero entrada
 end
 
 print lista
-
+print
 
 
 contar lista keys values	'Cuenta la lista para obtener la lista de los huecos
@@ -180,6 +181,11 @@ take keys 1,n keys
 take values 1,n values
 
 print table keys values esperados
+
+CHISQUARE values esperados chiCuadrado 
+print
+print chiCuadrado
+
 
 
 
