@@ -168,20 +168,20 @@ print lista
 print
 
 
-contar lista keys values	'Cuenta la lista para obtener la lista de los huecos
+contar lista keys fo	'Cuenta la lista para obtener la lista de los huecos
 
-sum values totalHuecos	'Calcula el total de huecos
+sum fo totalHuecos	'Calcula el total de huecos
 
-calcEsperados keys totalHuecos esperados	'Calcula las frecuencias esperadas
+calcEsperados keys totalHuecos fe	'Calcula las frecuencias esperadas
 
-size esperados n	'Obtiene el tamaño de los esperados
+size fe n	'Obtiene el tamaño de los esperados
 
-take keys 1,n keys		'Recorta las listas de llaves y valores al mismo tamaño de las esperadas
-take values 1,n values
+take keys 1,n bin		'Recorta las listas de llaves y valores al mismo tamaño de las esperadas
+take fo 1,n fo
 
-print table keys values esperados	'Imprime bonita la tabla
+print table bin%2.0f fo%2.0f fe	'Imprime bonita la tabla
 
-CHISQUARE values esperados chiCuadrado 	'Calcula chisquare y lo imprime
+CHISQUARE fo fe chiCuadrado 	'Calcula chisquare y lo imprime
 print
 print chiCuadrado
 
