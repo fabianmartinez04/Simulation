@@ -1,3 +1,4 @@
+
 /*
 Tecnológico de Costa Rica
 Curso de Simulación 
@@ -6,6 +7,9 @@ Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 
 */
+
+INCLUDE "/lib/coordinatedVectorCommands.txt" 'Import para sortcoord
+
 
 
 
@@ -39,6 +43,64 @@ end
 
 
 
+
+/*
+* Incrementa los contadores que ya están trabajando
+*
+* Input: contadores
+* Output: contadores
+*/
+newcmd incContadores contadores
+   foreach i 1, 10	'El indice para recorrer los 10 contadores
+      
+      take contadores i cont	'Toma el valor del contador
+      if cont <> -1		'Si es diferente a -1 (si está trabajando) lo incrementa
+         cont = cont+1
+         put cont i contadores
+      end
+      
+   end
+end
+
+
+/*
+* Cuenta los huecos de una lista
+*
+* Input: lista
+* Output: keys values
+*/
+newcmd contar lista keys values
+   
+   contadores = (-1 -1 -1 -1 -1 -1 -1 -1 -1 -1) 	'Contadores, contadores[i] con i = digito
+					'El -1 significa que aún no está trabajando, o sea que aún no aparece el primer dígito para empezar a contar
+   keys = ()	'Huecos
+   values = () 	'Cantidad huecos
+   
+   
+   
+   foreach n (1 2 3 1 )
+      n = n+1	'Como las listas empiezan a contar en 1 se incrementa n en 1
+      
+      take contadores n contador	'Toma el contador de del dígito n
+      
+      if contador <> -1		'Si el contador está activo entonces guarda el registro
+         
+	/*
+	Lógica para actualizar keys y values
+	*/
+         
+      end
+      
+      incContadores contadores		'Incrementa los contadores activos
+      put (0) n contadores		'Reinicia el contador del digito actual
+      
+   end
+   
+   
+   print contadores
+end
+
+
 /*
 *********************************************
                      Main
@@ -47,26 +109,27 @@ end
 
 clearoutput
 
-read file "" entrada	'Lee el archivo con los números
+read file "D:/Progras/Simulation/PRUEBA DE HUECOS/91 Ejemplo de clase n=30 Huecos con Digitos-1.txt" entrada	'Lee el archivo con los números
+'read file "D:/Progras/Simulation/PRUEBA DE HUECOS/91 Ejemplo de clase n=30 Huecos con Digitos-1.txt" entrada	'Lee el archivo con los números
 'input cantDecimales 'Lee la cantidad de decimales para los números
 cantDecimales = 4
 
 lista = () 'Inicializa la lista vacía para los números
 
 
-' Recorre la lista de números y los explota para agregarlos a la lista final
+' Recorre la lista de números y los explota para agregarlos a la lista final 
 foreach numero entrada
-
+   
    explotar cantDecimales numero res
    concat lista res lista
-
+   
 end
 
 print lista
 
 
 
-
+contar lista keys values	'Cuenta la lista para obtener la lista de los huecos
 
 
 
