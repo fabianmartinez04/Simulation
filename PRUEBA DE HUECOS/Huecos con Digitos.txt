@@ -7,6 +7,8 @@ Tarea programada de Huecos con Dígitos
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 
+Valor obtenido con los datos de prueba de n=30 y 4 decimales: 5.18054
+Valor obtenido con los datos de prueba de n=1000 y 4 decimales: 33.5402
 */
 
 /*Librerias*/
