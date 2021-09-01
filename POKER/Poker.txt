@@ -4,6 +4,9 @@ Curso de Simulación
 Tarea programada de Prueba de Poker
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
+Resultados:
+Archivo de n=30: 4.2813
+Archivo de n=1000: 1.4589
 */
 
 
@@ -128,7 +131,7 @@ end
 
 clearoutput
 
-read file "D:/Progras/Simulation/POKER/91 Ejemplo Poker Clase n=30.txt" entrada	'Lee el archivo con los números
+read file "" entrada	'Lee el archivo con los números
 categorias = (0 0 0 0 0 0 0)	'Inicializa los contadores de las categorias
 
 
