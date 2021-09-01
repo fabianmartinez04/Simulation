@@ -166,7 +166,7 @@ foreach numero entrada
    
 end
 
-print lista
+'print lista
 print
 
 
