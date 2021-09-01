@@ -38,6 +38,79 @@ end
 
 
 /*
+* Devuelve el índice de la categoría de las cartas
+* 1 = Diferentes
+* 2 = Un par
+* 3 = Dos pares
+* 4 = Tercia
+* 5 = Full
+* 6 = Póker
+* 7 = Quintilla
+*
+* Input = cartas
+* Output = categoría
+*/
+newcmd categorizar cartas categoriaN
+   
+   multiples cartas=2 res
+   if res = 1	' Si hay un par
+      multiples cartas=3 res
+
+      if res=1	' Si hay Poker
+         categoriaN = 5
+
+      else		' Si hay un par
+         categoriaN = 2
+      end
+
+   elseif res = 2	' Si hay dos pares
+      categoriaN = 3
+
+   else
+      multiples cartas=1 res
+      if res = 5	' Si todos son diferentes
+         categoriaN = 1
+
+      else
+         multiples cartas=3 res
+         if res = 1	' Si hay una tercia
+            categoriaN = 4
+
+         else
+            multiples cartas=4 res
+            if res = 1	' Si hay un Full
+               categoriaN = 6
+
+            else		' Si hay una Quintilla
+               categoriaN = 7
+            end
+         end
+      end
+   end
+   
+end
+
+
+
+
+
+
+
+/*
+* Aumenta el contador de la categoría
+*
+* Input = categorias, categoria
+* Output = categorias
+*/
+newcmd incCategoria categorias categoria
+	take categorias categoria temp
+	temp = temp+1
+	put temp categoria categorias
+end
+
+
+
+/*
 *********************************************
                      Main
 *********************************************
@@ -45,17 +118,18 @@ end
 
 clearoutput
 
-read file "" entrada	'Lee el archivo con los números
-lista = () 'Inicializa la lista vacía para los números
+read file "D:/Progras/Simulation/POKER/91 Ejemplo Poker Clase n=30.txt" entrada	'Lee el archivo con los números
+categorias = (0 0 0 0 0 0 0)	'Inicializa los contadores de las categorias
 
 
 ' Recorre la lista de números y los explota para agregarlos a la lista final 
 foreach numero entrada
    
-   explotar 5 numero res
-   concat lista res lista
+   explotar 5 numero cartas 		' Obtiene las cartas en una lista
+   categorizar cartas categoria	' Obtiene la categoría de las cartas
+   
+  incCategoria categorias categoria	'Incrementa el contador según la categoría
    
 end
 
-print lista
-print
+print categorias
