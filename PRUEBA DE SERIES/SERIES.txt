@@ -1,0 +1,12 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Prueba de Series
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+Resultados:
+Archivo de n=30: 
+Archivo de n=1000 AAA: 
+Archivo de n=1000 BBB: 
+*/
