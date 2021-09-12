@@ -10,3 +10,47 @@ Archivo de n=30:
 Archivo de n=1000 AAA: 
 Archivo de n=1000 BBB: 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+*********************************************
+                     Main
+*********************************************
+*/
+
+clearoutput
+
+read file "D:/Progras/Simulation/PRUEBA DE SERIES/80 Clase Series n=100.txt" entrada	'Lee el archivo con los números
+
+'input cantIntervalos	'Lee la cantidad de intervalos
+cantIntervalos = 5
+dimension = cantIntervalos^2	'Calcula las dimensiones que tendrá el cuadrado
+
+tamanno = 1/cantIntervalos	'Calcula el tamaño de cada intervalo
+size entrada n		'Calcula la cantidad de numeros
+
+cuadrado = dimension#0	'Inicializa el cuadrado con las dimensiones dadas y todo en 0
+
+fe = (n - 1)/cantIntervalos^2	'Calcula la frecuencia esperada
+
+
+print entrada tamanno n fe cuadrado
+
+
+
+
+
+
+
+
+
