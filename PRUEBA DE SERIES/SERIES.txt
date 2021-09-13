@@ -5,21 +5,31 @@ Tarea programada de Prueba de Series
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 
-Resultados:
-Archivo de n=30: 
-Archivo de n=1000 AAA: 
-Archivo de n=1000 BBB: 
+Resultados con 5 intervalos:
+Archivo de n=30: 15.8989
+Archivo de n=1000 AAA: 19.2932
+Archivo de n=1000 BBB: 33.6076
 */
 
 
 
 
+/*
+*A partir de dos números haciendo de coordenadas calcula la región del punto y retorna los índices de esa región respectiva en la matriz
+*
+*Inputs: row, col, tamanno
+*Outputs: rowIndex, colIndex
+*/
+newcmd calcI row col tamanno rowIndex colIndex
 
+	rowIndex = (row/tamanno)+1	'Divide la fila y la columna por el tamanno de los intervalos para obtener los indices
+	colIndex = (col/tamanno)+1	'Se suma un 1 porque se empieza a contar en 1
 
+	'Redondea hacia abajo para obtener el indice correcto
+	INTEGER floor rowIndex rowIndex
+	INTEGER floor colIndex colIndex
 
-
-
-
+END
 
 
 /*
@@ -30,27 +40,66 @@ Archivo de n=1000 BBB:
 
 clearoutput
 
-read file "D:/Progras/Simulation/PRUEBA DE SERIES/80 Clase Series n=100.txt" entrada	'Lee el archivo con los números
+read file "" entrada	'Lee el archivo con los números
 
-'input cantIntervalos	'Lee la cantidad de intervalos
-cantIntervalos = 5
+input cantIntervalos	'Lee la cantidad de intervalos
+'cantIntervalos = 5 
+
+
+/*
+*	Preparación de las variables
+*/
+
 dimension = cantIntervalos^2	'Calcula las dimensiones que tendrá el cuadrado
 
 tamanno = 1/cantIntervalos	'Calcula el tamaño de cada intervalo
 size entrada n		'Calcula la cantidad de numeros
 
-cuadrado = dimension#0	'Inicializa el cuadrado con las dimensiones dadas y todo en 0
+NEWARRAY cuadro cantIntervalos cantIntervalos	'Crea el cuadrado con las dimensiones dadas
+
+'Inicializa cada posicion del cuadrado con un 0 para los contadores
+FOREACH row 1,cantIntervalos
+   FOREACH col 1,cantIntervalos
+      cuadro[row][col] = 0
+   END
+END
 
 fe = (n - 1)/cantIntervalos^2	'Calcula la frecuencia esperada
-
-
-print entrada tamanno n fe cuadrado
-
-
+listaFe = dimension#fe	'Crea la lista con las frecuencias esperadas
+fo = ()			'Prepara la lista de frecuencias observadas
 
 
 
+numCiclos = n - 1	'Para recorrer la lista de numeros se hace hasta n-1 porque cada vez pregunta por la posicion n+1
+
+FOREACH i 1,numCiclos
+
+	i2 = i+1
+	take entrada i row		'Toma el valor de la posicion i (fila)
+	take entrada i2 col		'Toma el valor de la posicion i+1 (columna)
+	calcI row col tamanno rowIndex colIndex	'Calcula los indices de la region de ese punto
+
+	cuadro[colIndex][rowindex] = cuadro[colIndex][rowindex] + 1	'Incrementa el contador de esa posicion
+END
 
 
+'Recorre de nuevo la matriz para imprimirla y convertirla en una lista para aplicar el chisquare
+FOREACH row cantIntervalos,1	'Recorre las filas al reves para que se muestre como un plano carteciano
+   fila = ()	'Inicia y reinicia la lista de la fila actual
+   FOREACH col 1,cantIntervalos
+      concat fila cuadro[row][col] fila	'Agrega las columnas a la fila
+   END
+   print fila%2.0f		'Imprime cada fila del cuadrado
+   concat fo fila fo		'Agrega la fila a la lista de frecuencias observadas
+END
+
+
+
+
+
+
+CHISQUARE fo listaFe chiCuadrado 	'Calcula chisquare y lo imprime
+print
+print chiCuadrado
 
 
