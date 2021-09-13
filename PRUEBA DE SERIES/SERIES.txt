@@ -6,7 +6,7 @@ Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 
 Resultados con 5 intervalos:
-Archivo de n=30: 15.8989
+Archivo de n=100: 15.8989
 Archivo de n=1000 AAA: 19.2932
 Archivo de n=1000 BBB: 33.6076
 */
