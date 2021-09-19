@@ -1,0 +1,69 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Prueba de Ji Cuadrado Normal
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+
+*/
+
+
+
+
+'*****
+'Calcula la probabilidad
+'de una distribución normal
+'dentro del rango
+newcmd probNormalRango limInf limSup promedio desviación prob
+   normalprob limInf promedio desviación probInf
+   normalprob limSup promedio desviación probSup
+   prob = probSup - probInf
+end
+
+
+
+
+
+
+/***********************************************************************
+			MAIN
+***********************************************************************/
+clearoutput
+
+' Toma de los datos necesarios para la prueba
+
+read file "D:/Progras/Simulation/JI CUADRADO NORMAL/01 aaa Normal de Clase n=180.txt" muestra
+'input tamIntervalo
+tamIntervalo = 1000
+
+
+' Calcula datos necesarios para empezar
+
+mean muestra promedio	'Calcula el promedio de la muestra
+stdev muestra desv		'Calcula la desviación de la muestra
+
+print promedio desv
+print "\n"
+
+size muestra tamañoMuestra
+
+print tamañoMuestra
+print
+
+'histogram binsize tamIntervalo muestra 
+histogramdata binsize tamIntervalo muestra binNumero binInicio binCentro freqObservada cumFreq
+binFinal = binInicio + tamIntervalo
+print table binInicio binFinal freqObservada
+
+
+
+
+
+
+
+
+
+
+
+
