@@ -8,7 +8,7 @@ desviación: 1095.6009322994237
 tamañoMuestra: 180.0
 
 binInicio     	binFinal      	freqObservada 
-0        	1000          	20            	
+0        		1000          	20            	
 1000          	2000          	35            	
 2000          	3000          	70            	
 3000          	4000          	40            	
@@ -16,18 +16,18 @@ binInicio     	binFinal      	freqObservada
 5000          	6000          	0.00        	
 
 binInicio     	binFinal      	freqObservada 
-0        	1000          	20            	
+0        		1000          	20            	
 1000          	2000          	35            	
 2000          	3000          	70            	
 3000          	4000          	40            	
 4000          	5000          	15            	
 
 probEsperada	freqEsperada
-0.0775  	13.9489 	
-0.2437  	43.8687 	
-0.3518  	63.3188 	
-0.2334  	42.0142 	
-0.0711  	12.792  	
+0.0775  		13.9489 	
+0.2437  		43.8687 	
+0.3518  		63.3188 	
+0.2334  		42.0142 	
+0.0711  		12.792  	
 
 
 binInicio	freqObservada 	freqEsperada

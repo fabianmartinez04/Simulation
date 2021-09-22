@@ -1,3 +1,5 @@
+
+
 /*
 Tecnológico de Costa Rica
 Curso de Simulación 
@@ -5,7 +7,9 @@ Tarea programada de Prueba de Ji Cuadrado Normal
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 
-
+n=180'  con 1000: 5.600611921850552
+n=10000 con 1: 33.2837323555378
+n=10000 con 2: 16.4209843315095
 */
 
 
@@ -23,6 +27,68 @@ end
 
 
 
+/*
+*Función que calcula la lista de las fe
+*
+*Inputs: listaInicios freq prom desv n
+*Outputs: freqEsperada
+*/
+newcmd calcFe listaInicios freq prom desv n freqEsperada
+   
+	'Prepara las listas para los resultados
+   freqEsperada = ()
+   probEsperada = ()
+   
+   foreach i listaInicios	'Se recorre la lista de los inicios de las frecuencias
+      rangoF = i + freq	'Se calcula el final de la frecuencia
+      probNormalRango i rangoF prom desv res	'Calcula la probabilidad esperada de ese intervalo
+      concat probEsperada res probEsperada	'Agrega la probabilidad a la lista
+      
+   end
+   
+   multiply probEsperada n freqEsperada	'Multiplica toda la lista por el tamaño de la muesta y lo guarda en la lista de las frecuencias esperadas
+	'print
+	'print table probEsperada%2.4f freqEsperada%2.4f
+   
+   
+end
+
+
+
+
+/*
+*Obtiene los índices donde se deben recortar las listas (donde fe es menor a 5)
+*
+*Inputs: fe
+*Outputs: inicio fin
+*/
+newcmd indexRecortar fe inicio fin
+   
+   size fe n
+   
+   inicio = 1
+   fin = n
+   
+	'Obtiene el índice de la primera frecuencia esperada mayor a 5
+   foreach i 1,n
+      take fe i elem
+      if elem >= 5
+         inicio = i
+         break
+      end
+   end
+   
+	'Obtiene el índice de la última frecuencia esperada mayor a 5
+   foreach i n,1
+      take fe i elem
+      if elem >= 5
+         fin = i
+         break
+      end
+   end
+   
+end
+
 
 
 
@@ -33,9 +99,9 @@ clearoutput
 
 ' Toma de los datos necesarios para la prueba
 
-read file "D:/Progras/Simulation/JI CUADRADO NORMAL/01 aaa Normal de Clase n=180.txt" muestra
-'input tamIntervalo
-tamIntervalo = 1000
+read file "" muestra
+input tamIntervalo
+'tamIntervalo = 1000
 
 
 ' Calcula datos necesarios para empezar
@@ -43,25 +109,50 @@ tamIntervalo = 1000
 mean muestra promedio	'Calcula el promedio de la muestra
 stdev muestra desv		'Calcula la desviación de la muestra
 
-print promedio desv
-print "\n"
+'print promedio desv
+'print "\n"
 
-size muestra tamañoMuestra
+size muestra tamañoMuestra	'Calcula el tamaño de la muestra
 
-print tamañoMuestra
-print
+'print tamañoMuestra
+'print
 
 'histogram binsize tamIntervalo muestra 
-histogramdata binsize tamIntervalo muestra binNumero binInicio binCentro freqObservada cumFreq
-binFinal = binInicio + tamIntervalo
-print table binInicio binFinal freqObservada
+histogramdata binsize tamIntervalo muestra binNumero binInicio binCentro freqObservada cumFreq	'Obtiene los datos del histograma
+binFinal = binInicio + tamIntervalo	'Calcula la lista de los finales de los intervalos
+
+'print table binInicio%2.4f binFinal freqObservada%2.4f
+'print
+
+size freqObservada foL	'Calcula el tamaño de la lista de frecuencias observadas para quitar el último índice (siempre será 0 por la forma de calcularlo)
+
+remove freqObservada foL freqObservada
+remove binInicio foL binInicio
+remove binFinal foL binFinal
 
 
+'print table binInicio%2.4f binFinal freqObservada
 
 
+calcFe binInicio tamIntervalo promedio desv tamañoMuestra freqEsperada	'Obtiene la lista de las frecuencias esperadas
+
+'print
+'print table binInicio%8.4f freqObservada%8.4f freqEsperada%8.4f
+
+indexRecortar freqEsperada inicio fin	'Obtiene los índices de donde debe recortar las listas en caso de tener que hacerlo
+
+take freqObservada inicio,fin newFo
+take freqEsperada inicio,fin newFe
+take binInicio inicio,fin newBin
+
+'print
+'print table newBin%8.4f newFo newFe
 
 
+chisquare newFo newFe chiCuad	'Calcula el Chi Cuadrado
 
+print
+print chiCuad
 
 
 
