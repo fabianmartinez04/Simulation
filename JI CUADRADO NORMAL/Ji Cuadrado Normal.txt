@@ -146,7 +146,7 @@ take freqEsperada inicio,fin newFe
 take binInicio inicio,fin newBin
 
 'print
-'print table newBin%8.4f newFo newFe
+print table newBin%8.4f newFo newFe
 
 
 chisquare newFo newFe chiCuad	'Calcula el Chi Cuadrado
