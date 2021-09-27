@@ -1,0 +1,111 @@
+
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Prueba KS Exponencial
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+n=10000 con 2: 0.009480755157128484
+n=10000 con 3: 0.01013368317178065
+*/
+
+
+
+
+
+
+'Calcula la Frecuencia Observada Acumulada
+newcmd calcFOA fo n foa
+
+	contador = 0
+	foa = ()
+
+	foreach f fo
+		contador = contador + f
+		concat foa contador foa
+	end
+
+end
+
+
+
+'Calcula la Probabilidad Esperada Acumulada
+newcmd calcPEA lista prom pea
+
+
+	pea = ()
+
+	foreach e lista
+		aux = - e / prom
+		exp aux potencia
+		res = 1 - potencia
+		concat pea res pea
+	end
+
+end
+
+
+
+
+/***********************************************************************
+			MAIN
+***********************************************************************/
+clearoutput
+
+' Toma de los datos necesarios para la prueba
+
+read file "" muestra
+input inter
+'inter = 3
+
+
+' Calcula datos necesarios para empezar
+
+mean muestra beta	'Calcula el beta de la muestra
+
+size muestra tamaño	'Calcula el tamaño de la muestra
+
+
+print inter
+print tamaño
+print beta
+
+
+'histogram binsize inter muestra 
+histogramdata binsize inter muestra binNumero inicio binCentro freqObservada cumFreq	'Obtiene los datos del histograma
+binFinal = inicio + inter	'Calcula la lista de los finales de los intervalos
+
+
+
+
+calcFOA freqObservada tamaño freqObsAcum	'Obtiene las frecuencias observadas acumuladas
+
+
+divide freqObsAcum tamaño probObsAcum	'Obtiene las probabilidades observadas acumuladas
+
+
+calcPEA binFinal beta probEspAcum	'Obtiene las probabilidades esperadas acumuladas
+
+
+
+subtract probObsAcum probEspAcum diferencias	'Realiza la resta de las probabilidades
+
+
+abs diferencias diferencias		'Aplica valor absoluto a las restas
+
+print
+print table  inicio%8.4f freqObservada%8.6f freqObsAcum%8.6f probObsAcum%8.6f probEspAcum%8.6f diferencias%8.4f
+
+
+
+max diferencias d	'Obtiene el valor d
+
+print
+print d
+
+
+
+
+
+
