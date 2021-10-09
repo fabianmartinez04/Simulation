@@ -1,0 +1,45 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Transformada Inversa
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+*/
+
+
+
+newcmd generarIU x
+	uniform 1 0 1 r
+	if 0 <= r and r < 0.5
+		
+		aux = abs (2*r - 1)
+		x = -(aux^(1/3))+1
+	else
+		x = sqrt(6*r+2) - 1.23
+	end
+end
+
+
+
+/***********************************************************************
+			MAIN
+***********************************************************************/
+
+
+clearoutput
+input muestra
+input intervalos
+rango = 2/intervalos
+
+repeat muestra
+	generarIU x
+	score x data
+end
+
+histogram density binsize rango data
+
+
+
+
+
