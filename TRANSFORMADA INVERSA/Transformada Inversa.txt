@@ -5,6 +5,20 @@ Tarea programada de Transformada Inversa
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 
+Fórmula de F8x):
+
+	? 0 si x < 0
+	?
+	? (x^3 / 2) - (3*x^2 / 2) + (3*x / 2) si 0 ? x ? 1
+F(x) = 	?
+	? (1/2) + ((x^2 - 1) / 6) si 1 ? x ? 2
+	?
+	? 1 si x > 2
+
+Para obtener la inversa de la primera función, r = (x^3 / 2) - (3*x^2 / 2) + (3*x / 2) se pasa la división de 2 al lado de r y se factoriza teniendo como resultado (x - 1)^3 + 1, de esta forma se despeja y se obtiene (2*r-1)^(1/3) + 1, en este caso como r siempre es menor o igual que 0.5, la raíz siempre será menor o igual a 0, por lo que se saca siempre el valor absoluto para evital el bug de raíces negativas.
+Para obtener la inversa de la segunda función, r = (1/2) + ((x^2 - 1) / 6) se realiza un despeje sencillo pasando el 1/2, luego la división de 6, el +1, y finalmente la multiplicación de 2, quedando así (6*r - 2)^(1/2).
+
+
 */
 
 
@@ -13,10 +27,10 @@ newcmd generarIU x
 	uniform 1 0 1 r
 	if 0 <= r and r < 0.5
 		
-		aux = abs (2*r - 1)
+		aux = abs (2*r - 1)	'Como la raíz siempre será negativa se aplica valor absoluto siempre (o bien multimplicar por -1)
 		x = -(aux^(1/3))+1
 	else
-		x = sqrt(6*r+2) - 1.23
+		x = sqrt(6*r - 2)
 	end
 end
 
