@@ -1,0 +1,108 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Descomposición e Integración
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+
+*/
+
+
+'*****
+' Una función de Prueba Muy Sencilla
+' en [0,3[
+newcmd fun x y
+	y = (x^2)/9
+end
+
+
+
+newcmd simpson a h nSimpson fx
+
+	res = fun(0)
+	cont = 1
+
+	numCiclos = nSimpson - 1
+
+	repeat numCiclos
+		print cont
+		cont = cont + 1
+	end
+
+end
+
+
+newcmd generarIntervalos limInf limSup n h lista
+
+	temp = limInf
+	repeat n
+		val = 
+	end
+
+end
+
+
+newcmd generarFx limInf limSup n h nSimpson fx ptos
+	lista = (limInf, limSup)
+	print lista
+	simpson limInf h nSimpson fx
+
+end
+
+
+
+newcmd acumularLista fx fxAcum
+
+end
+
+
+
+newcmd generarVar fxAcum ptos x
+
+end
+
+
+
+/***********************************************************************
+			MAIN
+***********************************************************************/
+
+clearoutput
+
+input "Límite Inferior :" limInf
+input "Límite Superior :" limSup
+input "Número intervalos :" n
+input "Particiones Simpson (número par):" nSimpson
+input "Tamaño de Muestra :" tamañoMuestra
+h = (limSup - limInf) / n
+
+
+generarIntervalos limInf limSup n h lista
+
+
+generarFx limInf limSup n h nSimpson fx ptos
+print ""
+'print table fx%4.4F ptos
+
+acumularLista fx fxAcum
+print ""
+'print table fxAcum%4.4F ptos 
+
+repeat tamañoMuestra
+'	generarVar fxAcum ptos x 
+'	score x muestra
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
