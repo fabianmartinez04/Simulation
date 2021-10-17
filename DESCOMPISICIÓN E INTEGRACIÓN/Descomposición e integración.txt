@@ -87,6 +87,14 @@ end
 
 newcmd acumularLista fx fxAcum
 
+	contador = 0
+	fxAcum = ()
+
+	foreach f fx	' Recorre los fx sumándolos y calculando los acumulados
+		contador = contador + f
+		concat fxAcum contador fxAcum
+	end
+
 end
 
 
@@ -119,16 +127,16 @@ tamañoMuestra = 10000
 h = (limSup - limInf) / n	' Calcula las divisiones de la función
 
 
-generarIntervalos limInf n h lista	' Obtiene la lista de los valores iniciales de los intervalos
+generarIntervalos limInf n h lista	' Obtiene la lista de los valores iniciales de los intervalos 
 
 
-generarFx lista n h nSimpson fx ptos	' Calcula los fx y los puntos medios de los intervalos
+generarFx lista n h nSimpson fx ptos	' Calcula los fx y los puntos medios de los intervalos 
 print ""
 print table fx%4.4F ptos
 
-acumularLista fx fxAcum
+acumularLista fx fxAcum 
 print ""
-'print table fxAcum%4.4F ptos 
+print table fxAcum%4.4F ptos
 
 repeat tamañoMuestra
 '	generarVar fxAcum ptos x 
