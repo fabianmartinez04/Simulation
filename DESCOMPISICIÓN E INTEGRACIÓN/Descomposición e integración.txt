@@ -9,6 +9,25 @@ Gustavo Blanco Alfaro 2019063503
 */
 
 
+/*
+* Genera la lista de los puntos iniciales de los intervalos
+*
+* Input: limInf n h
+* Output: lista
+*/
+newcmd generarIntervalos limInf n h lista
+
+	temp = limInf	' El primer valor es el límite inferior
+	lista = ()
+
+	repeat n	' repite la cantidad de intervalos que se ingresaron
+		concat lista temp lista	' Agrega el punto a una lista
+		temp = temp + h		' Aumente el punto en h
+	end
+
+end
+
+
 '*****
 ' Una función de Prueba Muy Sencilla
 ' en [0,3[
@@ -18,35 +37,49 @@ end
 
 
 
-newcmd simpson a h nSimpson fx
+newcmd simpson a b nSimpson fx
 
-	res = fun(0)
-	cont = 1
+	h = (b - a) / nSimpson	' Calcula el h para el intervalo
 
-	numCiclos = nSimpson - 1
+	res = fun(a) + fun(a + nSimpson*h)	' Prepara la variable de las supas con los extremos de los fx porque estos se multimplican por 1
+	cont = 1	' Inicia un contador con 1
+
+	numCiclos = nSimpson - 1	' Prepara los números de cliclos restándole el último valor porque ya se sumó al res
 
 	repeat numCiclos
-		print cont
+		x = a + cont*h		' Calcula el x para evaluar en el fx
+
+		temp = fun(x)		' Calcula fx
+		remainder cont 2 mod	' Saca el módulo del contador con 2, para que cuando contador sea par sea 0 y cuando sea impar sea 1
+		res = res + (2 + 2*mod) * temp	' Calcula la multimplicación de 2 o 4 con el fx y lo aumenta al total
+							' La lógica aquí para el 4 y el 2 es que se suma 2 + 2*residuo, así cuando el residuo es 0 da 2 y cuando es 1 da 4
+
 		cont = cont + 1
+	
 	end
+
+	fx = (h/3)*res		' Calcula la estumación de la integral
+
 
 end
 
 
-newcmd generarIntervalos limInf limSup n h lista
 
-	temp = limInf
-	repeat n
-		val = 
+newcmd generarFx lista n h nSimpson fx ptos
+	
+	' Inicializa las listas
+	ptos = ()
+	fx = ()
+
+	foreach inf lista	' Recorre la lista de valores iniciales
+		sup = inf + h	' Calcula el valor superior de ese intervalo
+		simpson inf sup nSimpson res	' Usa el algoritmo de simpson 
+		pto = inf + (sup - inf)/2	' Calcula el punto medio de ese intervalo
+
+		' Agrega los valores a las listas
+		concat fx res fx
+		concat ptos pto ptos
 	end
-
-end
-
-
-newcmd generarFx limInf limSup n h nSimpson fx ptos
-	lista = (limInf, limSup)
-	print lista
-	simpson limInf h nSimpson fx
 
 end
 
@@ -69,21 +102,29 @@ end
 ***********************************************************************/
 
 clearoutput
-
+/*
 input "Límite Inferior :" limInf
 input "Límite Superior :" limSup
 input "Número intervalos :" n
 input "Particiones Simpson (número par):" nSimpson
 input "Tamaño de Muestra :" tamañoMuestra
-h = (limSup - limInf) / n
+*/
+
+limInf = 0
+limSup = 3
+n = 3
+nSimpson = 4
+tamañoMuestra = 10000
+
+h = (limSup - limInf) / n	' Calcula las divisiones de la función
 
 
-generarIntervalos limInf limSup n h lista
+generarIntervalos limInf n h lista	' Obtiene la lista de los valores iniciales de los intervalos
 
 
-generarFx limInf limSup n h nSimpson fx ptos
+generarFx lista n h nSimpson fx ptos	' Calcula los fx y los puntos medios de los intervalos
 print ""
-'print table fx%4.4F ptos
+print table fx%4.4F ptos
 
 acumularLista fx fxAcum
 print ""
