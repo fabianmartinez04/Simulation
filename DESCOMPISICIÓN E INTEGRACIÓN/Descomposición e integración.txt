@@ -97,13 +97,27 @@ newcmd acumularLista fx fxAcum
 
 end
 
-
-
-newcmd generarVar fxAcum ptos x
-
+newcmd transformadaInversa fxAcum ptos r x
+	limiteInf = 0
+	limiteSup = 0
+	intervalo = 1
+	foreach limiteSup fxAcum
+		if r >= limiteInf AND r < limiteSup
+			take ptos intervalo x
+		end
+		intervalo = intervalo + 1
+		limiteInf = limiteSup
+	end
 end
 
-
+newcmd generarVar fxAcum ptos tamañoMuestra listaX
+	uniform tamañoMuestra 0 1 listaNum
+	foreach r listaNum
+		transformadaInversa fxAcum ptos r x
+		concat x listaX listaX
+	end
+	print listaX
+end
 
 /***********************************************************************
 			MAIN
@@ -138,13 +152,10 @@ acumularLista fx fxAcum
 print ""
 print table fxAcum%4.4F ptos
 
-repeat tamañoMuestra
-'	generarVar fxAcum ptos x 
-'	score x muestra
-end
+print
 
-
-
+generarVar fxAcum ptos tamañoMuestra listaX 
+HISTOGRAM binsize h listaX
 
 
 
