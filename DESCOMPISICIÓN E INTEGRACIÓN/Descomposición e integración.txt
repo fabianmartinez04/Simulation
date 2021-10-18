@@ -157,11 +157,11 @@ generarIntervalos limInf n h lista	' Obtiene la lista de los valores iniciales d
 
 generarFx lista n h nSimpson fx ptos	' Calcula los fx y los puntos medios de los intervalos 
 print ""
-print table fx%4.4F ptos
+print table fx%4.4F ptos%4.4F
 
 acumularLista fx fxAcum 
 print ""
-print table fxAcum%4.4F ptos
+print table fxAcum%4.4F ptos%4.4F
 
 print
 
