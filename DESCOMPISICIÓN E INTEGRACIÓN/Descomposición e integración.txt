@@ -29,10 +29,16 @@ end
 
 
 '*****
-' Una función de Prueba Muy Sencilla
+' Una Triangular
 ' en [0,3[
 newcmd fun x y
-	y = (x^2)/9
+	if 0 <= x and x <= 1
+		y = (2*x)/3
+	elseif 1 <= x and x <= 3
+	y = (6 - 2*x)/6
+	else
+		y = 0
+	end
 end
 
 
@@ -124,19 +130,14 @@ end
 ***********************************************************************/
 
 clearoutput
-/*
-input "Límite Inferior :" limInf
-input "Límite Superior :" limSup
-input "Número intervalos :" n
-input "Particiones Simpson (número par):" nSimpson
-input "Tamaño de Muestra :" tamañoMuestra
-*/
 
-limInf = 0
-limSup = 3
-n = 3
-nSimpson = 4
-tamañoMuestra = 10000
+input "Límite Inferior :" limInf 
+input "Límite Superior :" limSup 
+input "Número intervalos :" n 
+input "Particiones Simpson (número par):" nSimpson 
+input "Tamaño de Muestra :" tamañoMuestra 
+
+
 
 h = (limSup - limInf) / n	' Calcula las divisiones de la función
 
