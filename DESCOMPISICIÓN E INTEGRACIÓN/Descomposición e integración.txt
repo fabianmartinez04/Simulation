@@ -8,6 +8,18 @@ Gustavo Blanco Alfaro 2019063503
 
 */
 
+'*****
+' Una Triangular
+' en [0,3[
+newcmd fun x y
+	if 0 <= x and x <= 1
+		y = (2*x)/3
+	elseif 1 <= x and x <= 3
+	y = (6 - 2*x)/6
+	else
+		y = 0
+	end
+end
 
 /*
 * Genera la lista de los puntos iniciales de los intervalos
@@ -26,21 +38,6 @@ newcmd generarIntervalos limInf n h lista
 	end
 
 end
-
-
-'*****
-' Una Triangular
-' en [0,3[
-newcmd fun x y
-	if 0 <= x and x <= 1
-		y = (2*x)/3
-	elseif 1 <= x and x <= 3
-	y = (6 - 2*x)/6
-	else
-		y = 0
-	end
-end
-
 
 
 newcmd simpson a b nSimpson fx
@@ -103,22 +100,35 @@ newcmd acumularLista fx fxAcum
 
 end
 
+
+/*
+*  Utiliza el método de la función inversa paracalcular los valores de la probabilidad
+*
+* Input: fxAcum ptos r
+* Output: x
+*/
 newcmd transformadaInversa fxAcum ptos r x
 	limiteInf = 0
 	limiteSup = 0
 	intervalo = 1
-	foreach limiteSup fxAcum
+	foreach limiteSup fxAcum		'Recorre cada area acumulada para combrobar a que intervalo pertenece el r
 		if r >= limiteInf AND r < limiteSup
 			take ptos intervalo x
 		end
 		intervalo = intervalo + 1
-		limiteInf = limiteSup
+		limiteInf = limiteSup	'El limite superior del intervalo pasa a ser el inferior.
 	end
 end
 
+/*
+* Genera un número aleatorio uniforme "r" y llama la formula para calcular las x.
+*
+* Input: fxAcum ptos tamañoMuestra
+* Output: listaX
+*/
 newcmd generarVar fxAcum ptos tamañoMuestra listaX
-	uniform tamañoMuestra 0 1 listaNum
-	foreach r listaNum
+	uniform tamañoMuestra 0 1 listaNum        'Lista de numeros aleatorios r
+	foreach r listaNum		'Recorre cada numero y averigua su x
 		transformadaInversa fxAcum ptos r x
 		concat x listaX listaX
 	end
@@ -155,8 +165,8 @@ print table fxAcum%4.4F ptos
 
 print
 
-generarVar fxAcum ptos tamañoMuestra listaX 
-HISTOGRAM binsize h listaX
+generarVar fxAcum ptos tamañoMuestra listaX 'Calcular los x en base a los r aleatorios generados
+HISTOGRAM binsize h listaX 'Muestra el histograma creado
 
 
 
