@@ -1,0 +1,174 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Inventarios
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+
+*/
+
+
+/*
+* Obtiene una nueva venta (de 0 a 14)
+*/
+newcmd newVenta res
+	res = 15
+
+	until res <= 14
+		poisson 1 7 res
+	end
+end
+
+
+/*
+* Obtiene el tiempo para un nuevo pedido, solo si no hay otro activo
+*/
+newcmd newPedido dia
+	if dia = 0
+		dias = (1 1 1 2 2 2 2 3 3 3)
+		sample 1 dias dia
+	end
+end
+
+
+/*
+* Calcula en base al q y r si hay que realizar un nuevo pedido
+*/
+newcmd hayQuePedir q r dia res
+	if q <= r
+		newPedido dia
+		res = 1
+	else
+		res = 0
+	end
+end
+
+
+
+
+/*
+* El programa principal
+*/
+newcmd main q r costoTotal
+	
+	'Preparación de las variables
+
+	'Prepara las listas para la tabla final
+	Ini = ()	'La lista del inventario
+	PedirQ = ()	'La lista de las solicitudes
+	dias = ()	'La lista de los días restantes hasta una entrega
+	Venta = ()	'La lista de las ventas de cada día
+	
+
+	'Prepara las variables de uso en cada iteración
+	qActual = q	'La variable de la cantidad de productos en el día actual
+	solicitud = 0	'La variable de si en el día actual hay una solicitud de entrega activa (1=sí 0=no)
+	dia = 0		'La variable de la cantidad de días que faltan en el día actual
+	VentaDia = 0	'La variable de las ventas del día actual
+
+	
+	'Prepara las variables de los costos	
+	costoTotal = 0
+	costoFijo = 0
+	costoInventario = 0
+	costoPenalizacion = 0
+
+	numCiclos = 365	'La cantidad de días que se hará la prueba
+
+	N = 1,numCiclos	'Prepara la lista de números para la tabla
+
+
+	'Realiza la simulación del inventario los días que se definieron
+	repeat numCiclos
+
+
+		'Hace los cálculos para saber si hay que hacer un pedido, esto actualiza la variable "día" y "solicitus"
+		'es decir que actualiza los días para realizar un pedido y la variable que dice si hay un pedido en proceso
+		hayQuePedir qActual r dia solicitud
+
+
+		newVenta VentaDia	'Obtiene la venta del día
+
+
+		'Agrega algunos datos del día a las listas totales
+		concat dias dia dias	
+		concat Ini qActual Ini
+		concat PedirQ solicitud PedirQ
+		concat Venta VentaDia Venta
+
+
+
+		'Si el día es > 0 (si hay espera de encargos) se disminuye la espera en un día
+		if dia > 0
+			dia = dia - 1
+		end
+
+
+		'Se calcula el inventario que queda después de las ventas del día
+		'se reutiliza la variable del inventario del día porque de igual manera se usa en esa misma variable para el próximo día
+		qActual = qActual - VentaDia
+
+		'Agrega el inventario al final del día a la lista
+		concat	Final qActual Final
+
+
+		'Calcula los costos del día
+		if qActual > 0		'Si el inventario al final del día es positivo, entonces es costo de inventario
+			costoInventario = costoInventario + 20*qActual
+		elseif qActual < 0	'Si el inventario al final del día es negativo, entonces es costo de penalización
+			costoPenalizacion = costoPenalizacion + -50*qActual
+		end
+
+
+		'Pregunta si una entrega llega el día siguiente, de ser así aumenta el inventario y cobra el costo fijo
+		if dia = 0 and solicitud = 1
+			qActual = qActual + q
+			costoFijo = costoFijo + 100
+		end
+
+
+	end
+
+	print table N%8.4F Ini%8.4F PedirQ%8.4F dias%8.4F Venta%8.4F Final%8.4F
+	print
+	print costoFijo costoInventario costoPenalizacion
+
+	costoTotal = costoFijo + costoInventario + costoPenalizacion
+	
+end
+
+
+
+
+
+/***********************************************************************
+			MAIN
+***********************************************************************/
+
+clearoutput
+
+input "Ingrese q: " q
+input "Ingrese r: " r
+
+print 
+
+'Llama al programa principal con los datos del usuario
+main q r costoTotal
+
+print
+print costoTotal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
