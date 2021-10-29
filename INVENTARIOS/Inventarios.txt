@@ -4,8 +4,26 @@ Curso de Simulación
 Tarea programada de Inventarios
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
+*/
 
+/*
+En la busqueda del q y r optimos con 10 ? q ? 100 y 10 ? r ? q, se obtuvo la siguiente tabla al realizarla con 365 dias de inventario y unas 100000 veces para cada combinacion de posibles valores mostrada. Luego, se promedió el costo total de esas 100000 corridas y dicho promedio es el presentado en la siguiente tabla:
 
+q/r	10         	20          	30          	40          	50          	60          	70          	80          	90           100         
+100     314897.03     	370462.84	438969.36	510849.81	583206.49	655835.92	728831.19	802031.67	875489.56	950287.31
+90      280300.71 	334237.94   	402498.69 	474510.02 	547030.65 	619740.65 	692878.04 	766256.30 	840864.73     
+80      246360.60 	298283.75 	366164.32   	438278.36 	510928.62 	583845.33 	657094.56 	731428.97    
+70      213407.22 	262546.45 	330023.27 	402141.37 	474962.26 	548078.12 	622175.28        
+60      181815.51 	227246.21 	294072.94 	366337.30 	439295.53 	513108.14       
+50      152400.94 	192552.10 	258349.19 	330742.08 	404326.97     
+40      126768.07 	159003.45 	223220.75 	296020.96       
+30      108625.94 	127418.15 	189231.04       
+20      118456.43 	101087.004     
+10      6522447.27 
+
+Por lo tanto los valores optimos son:
+q = 20
+r = 20
 */
 
 
