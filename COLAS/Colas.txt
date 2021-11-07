@@ -1,0 +1,69 @@
+/*
+Tecnológico de Costa Rica
+Curso de Simulación 
+Tarea programada de Inventario con Colas
+Fabian Martínez Valverde 2019061575
+Gustavo Blanco Alfaro 2019063503
+
+Solución con:
+
+3 empleados:
+4 empleados:
+5 empleados:
+6 empleados:
+
+*/
+
+
+
+
+newcmd obtenerEntrada tiempo
+   exponential 1 40 tiempo
+   integer ceiling tiempo tiempo
+end
+
+
+newcmd obtenerSalida promedio tiempo
+   exponential 1 promedio tiempo
+   integer ceiling tiempo tiempo
+end
+
+
+
+
+
+
+
+
+
+/***********************************************************************
+			MAIN
+***********************************************************************/
+
+clearoutput
+
+input "Cantidad de empleados: " empleados
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
