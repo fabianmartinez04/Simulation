@@ -68,15 +68,68 @@ clearoutput
 
 input "Cantidad de empleados: " empleados
 
-obtenerMedia empleados media 
+obtenerMedia empleados media
 
 if media = -1
 	print "Los empleados deben ser de 3 a 6"
 else
 
-	obtenerCamionesEspera cantidad
-	print cantidad
+	obtenerCamionesEspera contCamiones
+	print contCamiones
 
+
+	'Preparación de listas
+	Tiempo = ()
+	Evento = ()
+	Tiempo_Sig_Sal = ()
+	Cola = ()
+	Tiempo_Sig_Ent = ()
+	Tiempo_Ocioso_Personal = ()
+	Tiempo_Ocioso_Buses = ()
+
+
+	'Preparación de variables
+	TiempoActual = 0
+	STRING "Inicio" EventoActual
+	Tiempo_Sig_SalActual = 0
+	ColaActual = ()
+	Tiempo_Sig_EntActual = 0
+	Tiempo_Ocioso_PersonalActual = 0
+	Tiempo_Ocioso_BusesActual = 0
+
+	STRING "Salida" sSalida
+	STRING "Entrada" sEntrada
+
+	tamColaActual = 0
+	
+
+	until Tiempo_Sig_EntActual >= 480 AND tamColaActual = 0
+
+		size ColaActual tamColaActual
+
+		STRING_COMPARE EventoActual "Salida" esSalida
+
+		if esSalida <> 0
+			obtenerEntrada Tiempo_Sig_EntActual
+		end
+		
+		concat Tiempo_Sig_End Tiempo_Sig_EntActual Tiempo_Sig_End
+
+
+		if contCamiones <> 0
+			obtenerSalida media Tiempo_Sig_SalActual
+		else
+			STRING "x" Tiempo_Sig_SalActual
+		end
+
+		concat Tiempo_Sig_Sal Tiempo_Sig_SalActual Tiempo_Sig_Sal
+
+		Tiempo_Sig_EntActual = Tiempo_Sig_EntActual + 100
+		print Tiempo_Sig_EntActual
+
+	end
+
+	print table Tiempo Evento Tiempo_Sig_Sal Tiempo_Sig_Ent Tiempo_Ocioso_Personal 	Tiempo_Ocioso_Buses Cola
 
 end
 
