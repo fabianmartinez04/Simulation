@@ -15,14 +15,38 @@ Solución con:
 */
 
 
+'Función para obtener la cantidad de camiones en espera al inicio de la simulación
+newcmd obtenerCamionesEspera cantidad
+	copy 50#0 25#1 15#2 10#3 tabla
+	sample 1 tabla cantidad
+end
 
 
+
+'Función para obtener la media según la cantidad de empleados
+newcmd obtenerMedia empleados media
+	if empleados = 3
+		media = 37
+	elseif empleados = 4
+		media = 35
+	elseif empleados = 5
+		media = 33
+	elseif empleados = 6
+		media = 31
+	else
+		media = -1
+	end
+end
+
+
+'Función para obtener la siguiente entrada de un camión
 newcmd obtenerEntrada tiempo
    exponential 1 40 tiempo
    integer ceiling tiempo tiempo
 end
 
 
+'Función para obtener la salida de un camión según la cantidad de empleados
 newcmd obtenerSalida promedio tiempo
    exponential 1 promedio tiempo
    integer ceiling tiempo tiempo
@@ -44,23 +68,17 @@ clearoutput
 
 input "Cantidad de empleados: " empleados
 
+obtenerMedia empleados media 
+
+if media = -1
+	print "Los empleados deben ser de 3 a 6"
+else
+
+	obtenerCamionesEspera cantidad
+	print cantidad
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+end
 
 
 
