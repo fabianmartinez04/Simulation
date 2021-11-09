@@ -76,60 +76,109 @@ else
 
 	obtenerCamionesEspera contCamiones
 	print contCamiones
+	print "\n"
 
 
 	'Preparación de listas
 	Tiempo = ()
 	Evento = ()
-	Tiempo_Sig_Sal = ()
+	Sig_Salida = ()
 	Cola = ()
-	Tiempo_Sig_Ent = ()
-	Tiempo_Ocioso_Personal = ()
-	Tiempo_Ocioso_Buses = ()
+	Sig_Entrada = ()
+	T_Ocioso = ()
+	T_Esp_Bus = ()
 
 
 	'Preparación de variables
-	TiempoActual = 0
-	STRING "Inicio" EventoActual
-	Tiempo_Sig_SalActual = 0
-	ColaActual = ()
-	Tiempo_Sig_EntActual = 0
-	Tiempo_Ocioso_PersonalActual = 0
-	Tiempo_Ocioso_BusesActual = 0
+	NAME Inicio Salida Entrada Fin x
 
-	STRING "Salida" sSalida
-	STRING "Entrada" sEntrada
+	TiempoActual = 0
+	TiempoAnterior = 0
+	TiempoDif = 0
+	EventoActual = Inicio
+	SalActual = 0
+	SalAnterior = 0
+	ColaActual = ()
+	EntActual = 0
+	T_OciosoActual = 0
+	T_Esp_BusActual = 0
 
 	tamColaActual = 0
 	
 
-	until Tiempo_Sig_EntActual >= 480 AND tamColaActual = 0
+	until EntActual >= 480 AND contCamiones = 0
 
 		size ColaActual tamColaActual
 
-		STRING_COMPARE EventoActual "Salida" esSalida
+		concat Tiempo TiempoActual Tiempo
+		concat Evento EventoActual Evento
 
-		if esSalida <> 0
-			obtenerEntrada Tiempo_Sig_EntActual
+		TiempoDif = TiempoActual - TiempoAnterior
+
+
+		if SalActual = 9999
+			T_OciosoActual = TiempoDif
+			concat T_Ocioso T_OciosoActual T_Ocioso
+		else
+			concat T_Ocioso 0 T_Ocioso
+		end
+
+
+		if EventoActual <> Salida
+			obtenerEntrada EntActual
+			EntActual = TiempoActual + EntActual
 		end
 		
-		concat Tiempo_Sig_End Tiempo_Sig_EntActual Tiempo_Sig_End
-
-
-		if contCamiones <> 0
-			obtenerSalida media Tiempo_Sig_SalActual
-		else
-			STRING "x" Tiempo_Sig_SalActual
+		if EntActual > 480
+			'Agregue algo para identificar que ya no se recibe
 		end
 
-		concat Tiempo_Sig_Sal Tiempo_Sig_SalActual Tiempo_Sig_Sal
 
-		Tiempo_Sig_EntActual = Tiempo_Sig_EntActual + 100
-		print Tiempo_Sig_EntActual
+		concat Sig_Entrada EntActual Sig_Entrada
 
+
+		if (contCamiones > 0 AND EventoActual = Salida) OR contCamiones > 0
+			obtenerSalida media SalActual
+			SalActual = TiempoActual + SalActual
+			concat Sig_Salida SalActual Sig_Salida
+
+		else
+			SalActual = 9999
+			concat Sig_Salida x Sig_Salida
+		end
+
+
+
+		'Hace los calculos con las colas
+		if salAnterior = salActual
+			concat ColaActual 0 ColaActual
+		end
+
+
+		concat Cola ColaActual Cola
+
+		
+		'Asigna las variables para la iteración anterior
+		TiempoAnterior = TiempoActual
+		salAnterior = salActual
+		
+		if EntActual < SalActual AND EntActual <= 480
+			TiempoActual = EntActual
+			EventoActual = Entrada
+			contCamiones = contCamiones + 1
+		else
+			TiempoActual = SalActual
+			EventoActual = Salida
+			contCamiones = contCamiones - 1
+		end
+		
+
+		
+		
+		
 	end
 
-	print table Tiempo Evento Tiempo_Sig_Sal Tiempo_Sig_Ent Tiempo_Ocioso_Personal 	Tiempo_Ocioso_Buses Cola
+	print table Tiempo%8.4f Evento Sig_Salida%8.4f Sig_Entrada%8.4f T_Ocioso%8.4f T_Esp_Bus%8.4f Cola%8.4F
 
 end
 
