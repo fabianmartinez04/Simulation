@@ -54,10 +54,18 @@ end
 
 
 
+newcmd incTiempoCola tiempo cola
 
+	nuevaCola = ()
 
+	foreach c cola
+		c = c + tiempo
+		concat nuevaCola c nuevaCola
+	end
 
+	cola = nuevaCola
 
+end
 
 
 /***********************************************************************
@@ -79,18 +87,9 @@ else
 	print "\n"
 
 
-	'Preparación de listas
-	Tiempo = ()
-	Evento = ()
-	Sig_Salida = ()
-	Cola = ()
-	Sig_Entrada = ()
-	T_Ocioso = ()
-	T_Esp_Bus = ()
-
-
 	'Preparación de variables
-	NAME Inicio Salida Entrada Fin x
+	NAME Inicio Salida Entrada Fin
+	NAME 9999 x
 
 	TiempoActual = 0
 	TiempoAnterior = 0
@@ -98,87 +97,135 @@ else
 	EventoActual = Inicio
 	SalActual = 0
 	SalAnterior = 0
-	ColaActual = ()
 	EntActual = 0
 	T_OciosoActual = 0
 	T_Esp_BusActual = 0
 
 	tamColaActual = 0
-	
 
-	until EntActual >= 480 AND contCamiones = 0
+	camionesEnLista = contCamiones - 1
+	copy camionesEnLista#0 ColaActual
+
+	print "Tiempo\t\tEvento\t\tSig.Salida\tSig.Entrada\tT.Ocioso\tT.Espera\tCola"
+	print "===================================================================================================="
+	
+	'Repetir hasta que la próxima entrega sea luego del minuto 480 y que ya no hayan camiones en la cola
+	until EntActual >= 480 AND contCamiones <= 1
+
+
+		if EventoActual = Salida
+			contCamiones = contCamiones - 1
+		elseif EventoActual = Entrada
+			contCamiones = contCamiones + 1
+		end
+
 
 		size ColaActual tamColaActual
 
-		concat Tiempo TiempoActual Tiempo
-		concat Evento EventoActual Evento
 
 		TiempoDif = TiempoActual - TiempoAnterior
 
+		
 
-		if SalActual = 9999
-			T_OciosoActual = TiempoDif
-			concat T_Ocioso T_OciosoActual T_Ocioso
-		else
-			concat T_Ocioso 0 T_Ocioso
-		end
-
-
+		'Si el evento es diferente a salida entonces quiere decir que se calcula una nueva entrada
 		if EventoActual <> Salida
 			obtenerEntrada EntActual
 			EntActual = TiempoActual + EntActual
+			T_Esp_BusActual = 0
+		elseif contCamiones >= 1
+			take ColaActual 1 T_Esp_BusActual
+			T_Esp_BusActual = T_Esp_BusActual + TiempoDif
+			remove ColaActual 1 ColaActual
+		else
+			T_Esp_BusActual = 0
 		end
+
+
+		'Si en la iteración anterior no habían camiones para una salida aumenta el tiempo ocioso
+		if SalActual = 9999
+			T_OciosoActual = TiempoDif
+		else
+			T_OciosoActual = 0
+		end
+
+
 		
-		if EntActual > 480
-			'Agregue algo para identificar que ya no se recibe
-		end
+		
 
 
-		concat Sig_Entrada EntActual Sig_Entrada
-
-
-		if (contCamiones > 0 AND EventoActual = Salida) OR contCamiones > 0
+		
+		if SalActual = x OR (contCamiones > 0 AND EventoActual <> Entrada)
 			obtenerSalida media SalActual
 			SalActual = TiempoActual + SalActual
-			concat Sig_Salida SalActual Sig_Salida
-
-		else
-			SalActual = 9999
-			concat Sig_Salida x Sig_Salida
+		
+		elseif contCamiones = 0
+			SalActual = x
 		end
 
 
+		
+		
 
-		'Hace los calculos con las colas
-		if salAnterior = salActual
+		incTiempoCola TiempoDif ColaActual
+
+		if EventoActual = Entrada AND contCamiones > 1
 			concat ColaActual 0 ColaActual
 		end
-
-
-		concat Cola ColaActual Cola
 
 		
 		'Asigna las variables para la iteración anterior
 		TiempoAnterior = TiempoActual
 		salAnterior = salActual
+
+
+		'Print de cada iteración
+		String "" ColaActual%1.0f Cola
 		
+		
+		if EntActual > 480
+			output "%8.4F\t%8\t\t%8.4F\t\t%3.4F**\t\t%8.4F\t\t%8.4F\t\t" TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual
+		else
+			output "%8.4F\t%8\t\t%8.4F\t\t%8.4F\t\t%8.4F\t\t%8.4F\t\t" TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual
+		end
+
+		print Cola
+		'print contCamiones
+
+
+
+		
+		'Calcula cual acción es la más cercana a ocurrir, si una entrada o una salida
 		if EntActual < SalActual AND EntActual <= 480
 			TiempoActual = EntActual
 			EventoActual = Entrada
-			contCamiones = contCamiones + 1
+
+			
 		else
 			TiempoActual = SalActual
 			EventoActual = Salida
-			contCamiones = contCamiones - 1
+
 		end
 		
+		'print contCamiones
 
 		
 		
-		
+
 	end
 
-	print table Tiempo%8.4f Evento Sig_Salida%8.4f Sig_Entrada%8.4f T_Ocioso%8.4f T_Esp_Bus%8.4f Cola%8.4F
+	EventoActual = Fin
+
+	if TiempoActual < 480
+		T_OciosoActual = 480 - TiempoActual
+		TiempoActual = 480
+	end
+
+	output "%8.4F\t%8\t\t\t\t\t\t%8.4F\t\t\t\t\n" TiempoActual EventoActual T_OciosoActual
+
+
+	
+	print "===================================================================================================="
+	print "Tiempo\t\tEvento\t\tSig.Salida\tSig.Entrada\tT.Ocioso\tT.Espera\tCola"
 
 end
 
