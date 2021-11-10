@@ -14,6 +14,17 @@ Solución con:
 
 */
 
+'Declaración de nombres usados
+NAME Inicio Salida Entrada Fin
+NAME 9999 x
+
+'Declara los nombres globales para usarlos en funciones
+GLOBAL Inicio
+GLOBAL Salida
+GLOBAL Entrada
+GLOBAL Fin
+GLOBAL x
+
 
 'Función para obtener la cantidad de camiones en espera al inicio de la simulación
 newcmd obtenerCamionesEspera cantidad
@@ -53,19 +64,43 @@ newcmd obtenerSalida promedio tiempo
 end
 
 
-
+'Función que incrementa todos los elementos en la cola el tiempo dado
 newcmd incTiempoCola tiempo cola
-
 	nuevaCola = ()
-
 	foreach c cola
 		c = c + tiempo
 		concat nuevaCola c nuevaCola
 	end
-
 	cola = nuevaCola
-
 end
+
+
+'Función que incrementa o decrementa el contador de camiones
+newcmd calcContCamiones evento cont
+	if evento = Salida
+		cont = cont - 1
+	elseif evento = Entrada
+		cont = cont + 1
+	end
+end
+
+
+'Función que imprime todos los datos de una iteración (una fila de la tabla)
+newcmd printRow TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual ColaActual
+	'Print de cada iteración
+	String "" ColaActual%1.0f Cola
+		
+	'Si ya no se aceptan entradas se imprime la marca de que ya no se aceptan (estético)
+	if EntActual > 480
+		output "%8.4F\t%8\t\t%8.4F\t\t%3.4F**\t\t%8.4F\t\t%8.4F\t\t" TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual
+	else
+		output "%8.4F\t%8\t\t%8.4F\t\t%8.4F\t\t%8.4F\t\t%8.4F\t\t" TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual
+	end
+	print Cola
+end
+
+
+
 
 
 /***********************************************************************
@@ -82,10 +117,12 @@ if media = -1
 	print "Los empleados deben ser de 3 a 6"
 else
 
-	obtenerCamionesEspera contCamiones
+	obtenerCamionesEspera contCamiones 'Obtiene los camiones que estarán al inicio
 	print contCamiones
 	print "\n"
 
+
+	'Preparación de las variables para los costos
 	salarios = 0
 	tiempo_normal = 0
 	tiempo_extra = 0
@@ -98,8 +135,7 @@ else
 
 
 	'Preparación de variables
-	NAME Inicio Salida Entrada Fin
-	NAME 9999 x
+
 
 	TiempoActual = 0
 	TiempoAnterior = 0
@@ -111,12 +147,13 @@ else
 	T_OciosoActual = 0
 	T_Esp_BusActual = 0
 
-
+	
+	'Preparación de variables contadores para los costos
 	ocioTotal = 0
 	esperaTotal = 0
 
 	camionesEnLista = contCamiones - 1
-	copy camionesEnLista#0 ColaActual
+	copy camionesEnLista#0 ColaActual 'Inicia la lista de los camiones en la cola
 
 	print "Tiempo\t\tEvento\t\tSig.Salida\tSig.Entrada\tT.Ocioso\tT.Espera\tCola"
 	print "=============================================================================================================="
@@ -124,30 +161,28 @@ else
 	'Repetir hasta que la próxima entrega sea luego del minuto 480 y que ya no hayan camiones en la cola
 	until EntActual >= 480 AND contCamiones <= 1
 
-
-		if EventoActual = Salida
-			contCamiones = contCamiones - 1
-		elseif EventoActual = Entrada
-			contCamiones = contCamiones + 1
-		end
+		'Aumenta o disminuye el contador de camiones según el evento
+		calcContCamiones EventoActual contCamiones
 
 
+		'Calcula el tiempo transcurrido
 		TiempoDif = TiempoActual - TiempoAnterior
 
 		
+
+		T_Esp_BusActual = 0 'Pone el tiempo de espera en 0 cada vez para evitar datos basura
+
 
 		'Si el evento es diferente a salida entonces quiere decir que se calcula una nueva entrada
 		if EventoActual <> Salida
 			obtenerEntrada EntActual
 			EntActual = TiempoActual + EntActual
-			T_Esp_BusActual = 0
-		elseif contCamiones >= 1
+		elseif contCamiones >= 1	'Si el evento es una salida y el contador de camiones es mayor a 1 entonces saca uno de la cola
 			take ColaActual 1 T_Esp_BusActual
 			T_Esp_BusActual = T_Esp_BusActual + TiempoDif
 			esperaTotal = esperaTotal + T_Esp_BusActual
 			remove ColaActual 1 ColaActual
-		else
-			T_Esp_BusActual = 0
+
 		end
 
 
@@ -164,19 +199,19 @@ else
 		
 
 
-		
+		'Para obtener otra salida pregunta si la vez pasada hubo tiempo ocioso o que si el evento es una salida y hay camiones para sacar
 		if SalActual = x OR (contCamiones > 0 AND EventoActual <> Entrada)
 			obtenerSalida media SalActual
 			SalActual = TiempoActual + SalActual
-		
-		elseif contCamiones = 0
+		elseif contCamiones = 0	'Si lo anterior no se cumple y no hay camiones para atender se pone tiempo ocioso, no hay salidas próximas
 			SalActual = x
 		end
 
 
-
+		'Incrementa los tiempos de espera de la cola
 		incTiempoCola TiempoDif ColaActual
 
+		'Si el evento es una entrada y ya hay un camión siendo atendido entonces se pone en la cola
 		if EventoActual = Entrada AND contCamiones > 1
 			concat ColaActual 0 ColaActual
 		end
@@ -187,18 +222,8 @@ else
 		salAnterior = salActual
 
 
-		'Print de cada iteración
-		String "" ColaActual%1.0f Cola
-		
-		
-		if EntActual > 480
-			output "%8.4F\t%8\t\t%8.4F\t\t%3.4F**\t\t%8.4F\t\t%8.4F\t\t" TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual
-		else
-			output "%8.4F\t%8\t\t%8.4F\t\t%8.4F\t\t%8.4F\t\t%8.4F\t\t" TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual
-		end
-
-		print Cola
-		'print contCamiones
+		'Imprime la fila de la iteración
+		printRow TiempoActual EventoActual SalActual EntActual T_OciosoActual T_Esp_BusActual ColaActual
 
 
 
@@ -207,8 +232,6 @@ else
 		if EntActual < SalActual AND EntActual <= 480
 			TiempoActual = EntActual
 			EventoActual = Entrada
-
-			
 		else
 			TiempoActual = SalActual
 			EventoActual = Salida
@@ -217,18 +240,18 @@ else
 		
 		'print contCamiones
 
-		
-		
-
 	end
 
+	'Terminada la simulación realiza la última salida con el evento "Fin" y calcula la última información
 	EventoActual = Fin
 
+	'Si se terminó antes de tiempo entonces los minutos restantes cuenta como tiempo ocioso
 	if TiempoActual < 480
 		T_OciosoActual = 480 - TiempoActual
 		TiempoActual = 480
 	end
 
+	'Imprime la última información
 	output "%8.4F\t%8\t\t\t\t\t\t%8.4F\t\t\t\t\n" TiempoActual EventoActual T_OciosoActual
 
 
@@ -241,7 +264,7 @@ else
 	print "==================="
 
 
-
+	'Calcula todos los costos de la simulación
 	tiempo_normal = empleados * (480/60) * 25
 	tiempo_extra = empleados * (( TiempoActual - 480 ) / 60 ) * 37.5
 	salarios = tiempo_normal + tiempo_extra
@@ -253,7 +276,6 @@ else
 	espera_del_camion = (esperaTotal / 60) * 100
 
 	costo_total = salarios + tiempo_ocioso + operacion_almacen + espera_del_camion
-
 
 	print salarios%8.4f tiempo_ocioso%8.4f operacion_almacen%8.4f espera_del_camion%8.4f costo_total%8.4f
 
