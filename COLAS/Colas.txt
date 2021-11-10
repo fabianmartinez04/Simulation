@@ -86,6 +86,16 @@ else
 	print contCamiones
 	print "\n"
 
+	salarios = 0
+	tiempo_normal = 0
+	tiempo_extra = 0
+
+	tiempo_ocioso = 0
+	operacion_almacen = 0
+	espera_del_camion = 0
+
+	costo_total = 0
+
 
 	'Preparación de variables
 	NAME Inicio Salida Entrada Fin
@@ -101,13 +111,15 @@ else
 	T_OciosoActual = 0
 	T_Esp_BusActual = 0
 
-	tamColaActual = 0
+
+	ocioTotal = 0
+	esperaTotal = 0
 
 	camionesEnLista = contCamiones - 1
 	copy camionesEnLista#0 ColaActual
 
 	print "Tiempo\t\tEvento\t\tSig.Salida\tSig.Entrada\tT.Ocioso\tT.Espera\tCola"
-	print "===================================================================================================="
+	print "=============================================================================================================="
 	
 	'Repetir hasta que la próxima entrega sea luego del minuto 480 y que ya no hayan camiones en la cola
 	until EntActual >= 480 AND contCamiones <= 1
@@ -118,9 +130,6 @@ else
 		elseif EventoActual = Entrada
 			contCamiones = contCamiones + 1
 		end
-
-
-		size ColaActual tamColaActual
 
 
 		TiempoDif = TiempoActual - TiempoAnterior
@@ -135,6 +144,7 @@ else
 		elseif contCamiones >= 1
 			take ColaActual 1 T_Esp_BusActual
 			T_Esp_BusActual = T_Esp_BusActual + TiempoDif
+			esperaTotal = esperaTotal + T_Esp_BusActual
 			remove ColaActual 1 ColaActual
 		else
 			T_Esp_BusActual = 0
@@ -144,6 +154,7 @@ else
 		'Si en la iteración anterior no habían camiones para una salida aumenta el tiempo ocioso
 		if SalActual = 9999
 			T_OciosoActual = TiempoDif
+			ocioTotal = ocioTotal + T_OciosoActual
 		else
 			T_OciosoActual = 0
 		end
@@ -163,8 +174,6 @@ else
 		end
 
 
-		
-		
 
 		incTiempoCola TiempoDif ColaActual
 
@@ -224,8 +233,30 @@ else
 
 
 	
-	print "===================================================================================================="
+	print "=============================================================================================================="
 	print "Tiempo\t\tEvento\t\tSig.Salida\tSig.Entrada\tT.Ocioso\tT.Espera\tCola"
+	print "\n"
+	print "==================="
+	print "      COSTOS       "
+	print "==================="
+
+
+
+	tiempo_normal = empleados * (480/60) * 25
+	tiempo_extra = empleados * (( TiempoActual - 480 ) / 60 ) * 37.5
+	salarios = tiempo_normal + tiempo_extra
+
+	tiempo_ocioso = empleados * (ocioTotal / 60) * 25
+
+	operacion_almacen = (TiempoActual / 60) * 500
+
+	espera_del_camion = (esperaTotal / 60) * 100
+
+	costo_total = salarios + tiempo_ocioso + operacion_almacen + espera_del_camion
+
+
+	print salarios%8.4f tiempo_ocioso%8.4f operacion_almacen%8.4f espera_del_camion%8.4f costo_total%8.4f
+
 
 end
 
