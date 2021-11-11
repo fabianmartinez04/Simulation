@@ -5,12 +5,12 @@ Tarea programada de Inventario con Colas
 Fabian Martínez Valverde 2019061575
 Gustavo Blanco Alfaro 2019063503
 
-Solución con:
+Solución de costo total al realizar 500 000 ciclos por cada cantidad de empleados:
 
-3 empleados:
-4 empleados:
-5 empleados:
-6 empleados:
+3 empleados: 7626.2111
+4 empleados: 7589.0275
+5 empleados: 7572.2158
+6 empleados: 7550.7000
 
 */
 
