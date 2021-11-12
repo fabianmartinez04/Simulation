@@ -277,7 +277,7 @@ else
 
 	costo_total = salarios + tiempo_ocioso + operacion_almacen + espera_del_camion
 
-	print salarios%8.4f tiempo_ocioso%8.4f operacion_almacen%8.4f espera_del_camion%8.4f costo_total%8.4f
+	print tiempo_normal%8.4f tiempo_extra%8.4f salarios%8.4f tiempo_ocioso%8.4f operacion_almacen%8.4f espera_del_camion%8.4f costo_total%8.4f
 
 
 end
